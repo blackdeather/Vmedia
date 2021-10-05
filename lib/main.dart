@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -28,10 +29,11 @@ String _requestText = 'Sponge bob';
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context) => SettingScreen()));
-          },
-          child: Icon(Icons.settings),
+            onPressed: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context) => SettingScreen()));
+            },
+            child: Icon(Icons.settings),
+
         ),
 
       ),
@@ -58,6 +60,7 @@ class SecondScreen extends StatelessWidget {
               },
               child: Text('back'),
             ),),
+            VideoImagePreview(),
           ],
         ),
       ),
@@ -93,7 +96,7 @@ class SettingScreen extends StatelessWidget {
 
 
 Uri SearchVideoRequest(String requestText){
-  Uri result = Uri.parse('https://api.vk.com/method/video.search?q=$requestText&count=10&access_token=bb57a5ebbfed1eb3200ad1ca9a03265c41c2d934f0c9d2e23fe9611b0086a654c8729ecb3072841b3febd&v=5.131');
+  Uri result = Uri.parse('https://api.vk.com/method/video.search?q=$requestText&count=10&access_token=6dd1fc1c10e1ec36cdad942392bf538e95ae81e714c5aea879a5a70d5ab08d302f6489164a99fae236e58&v=5.131');
   return result;
 
 }
@@ -109,5 +112,19 @@ void GetJson (Uri url) async {
 }
 
 
+class VideoImagePreview extends StatelessWidget {
+  var _circular = CircularProgressIndicator();
+  var _src = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        _src ? _circular : Image.network('https://picsum.photos/250?image=9'),
+        Text('name videofile'),
+      ],
+    );
+  }
+}
 
 
