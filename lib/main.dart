@@ -12,10 +12,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(title: Text('Главное окно')),
-        body: Center(child: RaisedButton(onPressed: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context) => SecondScreen()));
+        body: Column(
+          children: [
+            TextField(onTap: (){}, style: TextStyle(fontSize: 24), maxLength: 30, maxLines: 1, textAlignVertical: TextAlignVertical.center,),
+            Center(child: RaisedButton(onPressed: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context) => SecondScreen()));
 
-        }, child: Text('Открыть второе окно'))),
+            }, child: Text('Открыть второе окно'))),
+          ],
+        ),
         floatingActionButton: FloatingActionButton(
           onPressed: (){
             Navigator.push(context, MaterialPageRoute(builder: (context) => SettingScreen()));
@@ -39,7 +44,7 @@ class SecondScreen extends StatelessWidget {
         appBar: AppBar(title: Text('second page'),),
         body: Column(
           children: <Widget>[
-            TextField(onTap: (){}, style: TextStyle(fontSize: 24), maxLength: 30, maxLines: 1, textAlignVertical: TextAlignVertical.center,),
+
 
             Center(child: RaisedButton(
               onPressed: (){
