@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 void main() {
   runApp(MaterialApp(home: MyApp()));
@@ -60,7 +62,7 @@ class SecondScreen extends StatelessWidget {
               },
               child: Text('back'),
             ),),
-            VideoImagePreview(),
+            VideoImagePreview('','video'),
           ],
         ),
       ),
@@ -101,6 +103,15 @@ Uri SearchVideoRequest(String requestText){
 
 }
 
+
+Future<List<Video>> fetchVideos(http.Client client) async {
+  final response = await client
+      .get(Uri.parse('https://jsonplaceholder.typicode.com/photos'));
+
+  // Use the compute function to run parsePhotos in a separate isolate.
+  return compute(parseVideos, response.body);
+}
+
 void GetJson (Uri url) async {
   http.get(url).then((response) {
     String d = url.toString();
@@ -113,14 +124,25 @@ void GetJson (Uri url) async {
 
 
 class VideoImagePreview extends StatelessWidget {
+  late String _imageUrl;
+  late String _nameVideo;
+  bool _circular = false; //TODO: должно быть true, написать правильный метод
 
+  VideoImagePreview(imageUrl, nameVideo){
+    _imageUrl = imageUrl;
+    _nameVideo = nameVideo;
+    if(_imageUrl.isNotEmpty){
+      _circular = false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        CircularOrImage(true, 'imageUrl'),
-        Text('name videofile'),
+        CircularOrImage(_circular, _imageUrl),
+        Text(_nameVideo),
       ],
     );
   }
@@ -141,6 +163,28 @@ class CircularOrImage extends StatelessWidget{
   @override
   Widget build (BuildContext context){
     return _isLoaded ? CircularProgressIndicator() : Image.network(_imageUrl);
+  }
+
+}
+
+class Video{
+  final String urlVideo;
+  final String title;
+  final String id;
+  final String urlPreviewImage;
+  const Video({
+    required this.urlVideo,
+    required this.title,
+    required this.id,
+    required this.urlPreviewImage
+  });
+
+
+  factory Video.fromJson(Map<String, dynamic> json){
+    return Video(urlVideo: json['items'][0]['player'] as String,
+        title: json['items'][0]['title'] as String,
+        id: json['items'][0]['id'] as String,
+        urlPreviewImage: json['items'][0]['image'][3]['url'] as String);
   }
 
 }
