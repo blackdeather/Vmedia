@@ -113,18 +113,36 @@ void GetJson (Uri url) async {
 
 
 class VideoImagePreview extends StatelessWidget {
-  var _circular = CircularProgressIndicator();
-  var _src = true;
+
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
-        _src ? _circular : Image.network('https://picsum.photos/250?image=9'),
+        CircularOrImage(true, 'imageUrl'),
         Text('name videofile'),
       ],
     );
   }
+}
+
+
+
+class CircularOrImage extends StatelessWidget{
+
+  late bool _isLoaded;
+  late String _imageUrl;
+
+  CircularOrImage(isLoaded, imageUrl){
+    _isLoaded = isLoaded;
+    _imageUrl = imageUrl;
+  }
+
+  @override
+  Widget build (BuildContext context){
+    return _isLoaded ? CircularProgressIndicator() : Image.network(_imageUrl);
+  }
+
 }
 
 
